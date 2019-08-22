@@ -1,0 +1,331 @@
+// JavaScript source code
+
+// Using jQuery, read our data and call visualize(...) only once the page is ready:
+$(function () {
+
+    d3.csv("final6.csv").then(function (data) {
+        // Write the data to the console for debugging:
+        console.log(data);
+
+        // Call our visualize function:
+        visualize(data);
+    });
+});
+
+
+var visualize = function (data) {
+    // Boilerplate:
+    var margin = { top: 50, right: 50, bottom: 50, left: 50 },
+       width = 1300 - margin.left - margin.right,
+       height = 500 - margin.top - margin.bottom;
+
+    var svg = d3.select("#chart")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .style("width", width + margin.left + margin.right)
+      .style("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Visualization Code:
+
+
+//X-axis
+    var years = _.map(data, "Year");
+    years = _.uniq(years);
+
+    var yearScale = d3.scalePoint()
+      .domain(years)
+      .range([0,width/10]);
+
+      var xAxis1 = d3.axisBottom()
+        .scale(yearScale)
+        .tickValues( [1980,2018] );
+        svg.append("g")
+          .attr("transform", "translate(0,420)")
+          .call(xAxis1)
+      var mywidth = width/6;
+
+
+
+      var xAxis2 = d3.axisBottom()
+            .scale(yearScale)
+            .tickValues( [1980,2018] );
+            svg.append("g")
+              .attr("transform", "translate(170 ,420)" )
+              .call(xAxis2)
+
+      var xAxis3 = d3.axisBottom()
+          .scale(yearScale)
+          .tickValues( [1980,2018] );
+          svg.append("g")
+            .attr("transform", "translate(340 ,420)" )
+            .call(xAxis3)
+
+        var xAxis4 = d3.axisBottom()
+              .scale(yearScale)
+              .tickValues( [1980,2018] );
+              svg.append("g")
+                .attr("transform", "translate( 510,420)" )
+                .call(xAxis4)
+
+          var xAxis5 = d3.axisBottom()
+                .scale(yearScale)
+                .tickValues( [1980,2018] );
+                svg.append("g")
+                  .attr("transform", "translate(680,420)" )
+                  .call(xAxis5)
+
+          var xAxis6 = d3.axisBottom()
+                .scale(yearScale)
+                .tickValues( [1980,2018] );
+                svg.append("g")
+                  .attr("transform", "translate(850,420)" )
+                  .call(xAxis6)
+
+
+
+        // var xAxis3 = d3.axisBottom()
+        //         .scale(yearScale)
+        //         .tickValues( [1980,2018] );
+        //         svg.append("g")
+        //           .attr("transform",function(){return translate(mywidth,420)})
+        //           .call(xAxis3)
+
+
+
+
+
+
+
+
+    // //Y-axis:
+    // var opponents = _.map(data, "Opponent");
+    // opponents = _.uniq(opponents);
+    //
+    // var opponentScale = d3.scalePoint()
+    //   .domain(opponents)
+    //   .range([0,height]);
+    //
+    //
+    //
+    // var yAxis = d3.axisLeft().scale(opponentScale);
+    // svg.append("g")
+    //   .attr("transform", "translate(0,10)")
+    //   .call(yAxis)
+
+         // Scale:
+      var percentageScale = d3.scaleLinear()
+                          .domain([0, 50])
+                         .range([ height, 0]);
+
+
+         // Axis:
+
+
+      var yAxis = d3.axisLeft().scale(percentageScale);
+          svg.append("g")
+            .attr("transform", "translate(0,10)")
+            .call(yAxis)
+
+    // var make = d3.nest()
+    // .key(function(d) { return d.name; })
+    // .rollup(function(v) { return {
+    //   count: v.length,
+    //   total: d3.sum(v, function(d) { return d.amount; }),
+    //   avg: d3.mean(v, function(d) { return d.amount; })
+    // }; })
+
+    // Visual Encoding:
+    //Make an SVG Container
+    var svgContainer = d3.select("body").append("svg")
+                                        .attr("width", 200)
+                                        .attr("height", 200);
+
+  //Draw the line
+    var circle = svgContainer.append("line")
+                             .attr("x1", 5)
+                             .attr("y1", 5)
+                            .attr("x2", 50)
+                           .attr("y2", 50);
+
+
+    svg.selectAll("circles")
+       .data(data)
+       .enter()
+       .append("circle")
+       .attr("r", function (d) { return 2; })
+       .attr("cx", function (d) { return yearScale(d.Fall1)+ 170*d.Scale; })
+       .attr("cy", function (d) {
+         //for (let i = 0; i < n; i++) { )
+         return percentageScale(d.Total_percent1 *100 );
+       })
+       .attr("fill" , function(d){ return d.Color; })
+
+       svg.selectAll("circles")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("r", function (d) { return 2; })
+          .attr("cx", function (d) { return yearScale(d.Fall2)+ 170*d.Scale; })
+          .attr("cy", function (d) {
+            //for (let i = 0; i < n; i++) { )
+            return percentageScale(d.Total_percent2 *100 );
+          })
+          .attr("fill" , function(d){ return d.Color; })
+
+
+              svg.append("text")
+                    .attr("x", (width / 2) - 50)
+                    .attr("y", 20 - (margin.top / 2))
+                    .attr("text-anchor", "middle")
+                    .style("font-size", "20px")
+                    .style("text-decoration", "underline")
+                    .style("font-weight", "bold")
+                    .style("font-family", "arial")
+                    .text("Change in Major Size Over the Years")
+
+
+
+                    svg.append("text")
+                          .attr("x", 130/2)
+                          .attr("y", 440)
+                          .attr("text-anchor", "middle")
+                          .style("font-size", "14px")
+                          .style("font-weight", "bold")
+                          .style("font-family", "arial")
+
+
+                          //.style("text-decoration", "underline")
+                          .text("LAS");
+
+
+          svg.append("text")
+                .attr("x", 130/2 + 170)
+                .attr("y", 440)
+                .attr("text-anchor", "middle")
+              .style("font-size", "14px")
+              .style("font-weight", "bold")
+              .style("font-family", "arial")
+                //.style("text-decoration", "underline")
+                .text("Engineering");
+
+
+                svg.append("text")
+                      .attr("x", 130/2 + 340)
+                      .attr("y", 440)
+                      .attr("text-anchor", "middle")
+                      .style("font-size", "14px")
+                      .style("font-weight", "bold")
+                      .style("font-family", "arial")
+                      //.style("text-decoration", "underline")
+                      .text("Business");
+
+                    svg.append("text")
+                          .attr("x", 130/2 + 510)
+                          .attr("y", 440)
+                          .attr("text-anchor", "middle")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .style("font-family", "arial")
+                          //.style("text-decoration", "underline")
+                          .text("ACES");
+
+
+                          svg.append("text")
+                                .attr("x", 130/2 + 680)
+                                .attr("y", 440)
+                                .attr("text-anchor", "middle")
+                              .style("font-size", "14px")
+                              .style("font-weight", "bold")
+                              .style("font-family", "arial")
+                                //.style("text-decoration", "underline")
+                                .text("Fine Arts");
+
+
+                                svg.append("text")
+                                      .attr("x", 130/2 + 850)
+                                      .attr("y", 440)
+                                      .attr("text-anchor", "middle")
+                                      .style("font-size", "14px")
+                                      .style("font-weight", "bold")
+                                      .style("font-family", "arial")
+                                      //.style("text-decoration", "underline")
+                                      .text("Education");
+
+
+
+                                      svg.append("text")
+                                            .attr("transform", "rotate(-90)")
+                                            .attr("x", -220)
+                                            .attr("y", -30)
+                                            .attr("text-anchor", "middle")
+                                            .style("font-size", "14px")
+                                            .style("font-weight", "bold")
+                                            .style("font-family", "arial")
+                                            //.style("text-decoration", "underline")
+                                            .text("Percentage of College");
+
+        //
+        // var tip = d3.tip()
+        //   .attr('class', 'd3-tip')
+        //   .html(function(d) {
+        //     return d.Year;
+        //   });
+        //
+        // svg.call(tip);
+        var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        svg.selectAll("lines")
+           .data(data)
+           .enter()
+           .append("line")
+           .attr("stroke-width", 2)
+           .attr("x1", function (d) { return yearScale(d.Fall1) + 170 * d.Scale; })
+           .attr("x2", function (d) { return yearScale(d.Fall2) + 170 * d.Scale; })
+           .attr("y1", function (d) {
+             return percentageScale(d.Total_percent1 *100 );
+           })
+           .attr("y2", function (d) {
+             return percentageScale(d.Total_percent2 *100 );
+           })
+           .attr("stroke" , function(d){ return d.Color; })
+           // .on('mouseover',tip.show)
+           // .on('mouseout',tip.hide)
+           // .on("mouseover", function() {
+           //   d3.select(this)
+           //   	.attr("fill", "red");
+           //   })
+           //   .on("mouseout", function(d, i) {
+           //     d3.select(this).attr("fill", function() {
+           //       return "" + color(this.id) + "";
+           //     });
+           //  });
+
+           .on("mouseover",function(d){
+                 d3.select(this).transition()
+                   .attr("stroke-width","5px")
+
+                svg.append("text")
+                    .attr("id", "Major")
+                    .attr("x", 50)
+                    .attr("y", 50)
+                    .text(d["Major Name"])
+                    .attr("stroke" ,d.Color)
+
+               })
+          .on("mouseout",function(d){
+                 d3.select(this).transition()
+                   .delay(250)
+                   .attr("stroke-width","2")
+                   d3.select("#Major").remove();
+
+              });
+
+
+
+
+};
